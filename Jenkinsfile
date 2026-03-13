@@ -26,10 +26,10 @@ pipeline {
 
     post {
         success {
-            notifySlack(status: 'SUCCESS', channel: '#deploys')
+            Test(status: 'SUCCESS', channel: '#deploys')
         }
         failure {
-            notifySlack(status: 'FAILURE', channel: '#deploys')
+            Test(status: 'FAILURE', channel: '#deploys')
         }
     }
 }
