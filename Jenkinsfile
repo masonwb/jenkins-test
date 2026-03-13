@@ -1,7 +1,7 @@
 // example-Jenkinsfile
 // Drop this in any project repo to use the shared library.
 
-@Library('test-library')   // the underscore imports all vars/ steps
+@Library('test-library') _  // the underscore imports all vars/ steps
 
 pipeline {
     agent any
@@ -17,9 +17,9 @@ pipeline {
     }
 
     stages {
-        stage('Hi') {
+        stage('say-hi') {
             steps {
-                echo hi
+                echo 'hi'
             }
         }
     }
