@@ -10,5 +10,7 @@ def call(Map config = [:]) {
     String color = [SUCCESS: 'good', FAILURE: 'danger', UNSTABLE: 'warning'].get(status, '#439FE0')
 
     // slackSend(channel: channel, color: color, message: message)
-    echo channel color message
+    echo channel
+    echo color
+    echo message
 }
