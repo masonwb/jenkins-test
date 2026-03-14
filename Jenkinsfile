@@ -2,17 +2,7 @@
 
 properties([
     parameters([
-        [$class: 'ChoiceParameter',
-            name: 'Tenant',
-            script: [
-                $class: 'GroovyScript',
-                script: [
-                    classpath: [],
-                    sandbox: false,
-                    script: getTenants()
-                ]
-            ]
-        ]
+        tenantParam()
     ])
 ])
 
