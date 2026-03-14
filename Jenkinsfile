@@ -1,10 +1,14 @@
 @Library('Katalog') _
 
-properties([
-    parameters([
-        tenantParam()
+withCredentials([
+    string(credentialsId: 'my-secret', variable: 'MY_SECRET'),
+]) {
+    properties([
+        parameters([
+            tenantParam(MY_SECRET)
+        ])
     ])
-])
+}
 
 pipeline {
     agent any
