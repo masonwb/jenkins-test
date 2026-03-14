@@ -1,7 +1,9 @@
 @Library('test-library') _
 
 def getTenantList() {
-  return ["a", "b", "c"]
+  return ```
+    return ["a", "b", "c"]
+  ```
 }
 
 properties([
