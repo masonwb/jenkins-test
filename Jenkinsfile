@@ -1,5 +1,9 @@
 @Library('test-library') _
 
+def getTenantList() {
+  return ["a", "b", "c"]
+}
+
 properties([
     parameters([
         [$class: 'ChoiceParameter',
@@ -10,8 +14,7 @@ properties([
                     classpath: [],
                     sandbox: false,
                     script: '''
-                        @Library('test-library') _
-                        return getTenants()
+                        return getTenantList()
                     '''
                 ]
             ]
