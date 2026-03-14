@@ -8,7 +8,7 @@ properties([
                 $class: 'GroovyScript',
                 script: [
                     classpath: [],
-                    sandbox: true,
+                    sandbox: false,
                     script: '''
                         @Library('test-library') _
                         return getTenants()
