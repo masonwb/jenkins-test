@@ -13,9 +13,7 @@ properties([
                 script: [
                     classpath: [],
                     sandbox: false,
-                    script: '''
-                        return getTenantList()
-                    '''
+                    script: getTenantList()
                 ]
             ]
         ]
