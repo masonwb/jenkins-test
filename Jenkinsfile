@@ -14,26 +14,24 @@ pipeline {
     options {
         timeout(time: 30, unit: 'MINUTES')
         buildDiscarder(logRotator(numToKeepStr: '10'))
-    }
 
-    properties([
-      parameters([
-        [$class: 'ChoiceParameter',
-          name: 'Tenant',
-          script: [
-            $class: 'GroovyScript',
-            script: [
-              classpath: [],
-              sandbox: true,
-              script: '''
-                @Library('test-library') _
-                return getTenants()
-              '''
+        parameters([
+            [$class: 'ChoiceParameter',
+                name: 'Tenant',
+                script: [
+                    $class: 'GroovyScript',
+                    script: [
+                        classpath: [],
+                        sandbox: true,
+                        script: '''
+                            @Library('test-library') _
+                            return getTenants()
+                        '''
+                    ]
+                ]
             ]
-          ]
-        ]
-      ])
-    ])
+        ])
+    }
 
     stages {
         stage('say-hi') {
