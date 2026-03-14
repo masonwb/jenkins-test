@@ -16,21 +16,23 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10'))
     }
 
-    parameters([
-        [$class: 'ChoiceParameter',
-            name: 'Tenant',
-            script: [
-                $class: 'GroovyScript',
+    properties([
+        parameters([
+            [$class: 'ChoiceParameter',
+                name: 'Tenant',
                 script: [
-                    classpath: [],
-                    sandbox: true,
-                    script: '''
-                        @Library('test-library') _
-                        return getTenants()
-                    '''
+                    $class: 'GroovyScript',
+                    script: [
+                        classpath: [],
+                        sandbox: true,
+                        script: '''
+                            @Library('test-library') _
+                            return getTenants()
+                        '''
+                    ]
                 ]
             ]
-        ]
+        ])
     ])
 
     stages {
