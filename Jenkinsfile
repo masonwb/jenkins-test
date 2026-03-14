@@ -22,7 +22,7 @@ pipeline {
     stages {
         stage('say-hi') {
             steps {
-                echo 'hi'
+                echo "${params.Tenant}"
             }
         }
     }
