@@ -4,9 +4,11 @@ import groovy.json.JsonSlurper
  * notifySlack.groovy
  * Send a Slack message: notifySlack(status: 'SUCCESS', channel: '#builds')
  */
-def call(Map config = [:]) {
-  def response = new URL("http://host.docker.internal:3000/api/v1/tenants").text
-  def json = new JsonSlurper().parseText(response)
+def call() {
+  return '''
+    def response = new URL("http://host.docker.internal:3000/api/v1/tenants").text
+    def json = new JsonSlurper().parseText(response)
 
-  return json.collect { it.name }
+    return json.collect { it.name }
+  '''
 }
