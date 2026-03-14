@@ -1,4 +1,4 @@
-@Library('test-library') _
+@Library('Katalog') _
 
 properties([
     parameters([
