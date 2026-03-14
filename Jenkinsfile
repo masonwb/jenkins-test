@@ -1,7 +1,23 @@
-// example-Jenkinsfile
-// Drop this in any project repo to use the shared library.
+@Library('test-library') _
 
-@Library('test-library') _  // the underscore imports all vars/ steps
+properties([
+    parameters([
+        [$class: 'ChoiceParameter',
+            name: 'Tenant',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    classpath: [],
+                    sandbox: true,
+                    script: '''
+                        @Library('test-library') _
+                        return getTenants()
+                    '''
+                ]
+            ]
+        ]
+    ])
+])
 
 pipeline {
     agent any
@@ -15,25 +31,6 @@ pipeline {
         timeout(time: 30, unit: 'MINUTES')
         buildDiscarder(logRotator(numToKeepStr: '10'))
     }
-
-    properties([
-        parameters([
-            [$class: 'ChoiceParameter',
-                name: 'Tenant',
-                script: [
-                    $class: 'GroovyScript',
-                    script: [
-                        classpath: [],
-                        sandbox: true,
-                        script: '''
-                            @Library('test-library') _
-                            return getTenants()
-                        '''
-                    ]
-                ]
-            ]
-        ])
-    ])
 
     stages {
         stage('say-hi') {
