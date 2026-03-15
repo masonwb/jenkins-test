@@ -10,7 +10,7 @@ def call(String secret) {
         script: '''
           if (!Tenant) return ["Select a tenant first"]
 
-          return ["\${Tenant} Dev", "\${Tenant} Test", "\${Tenant} Prod"]
+          return [Tenant + " Dev", Tenant + " Test", Tenant + " Prod"]
         '''
       ],
       fallbackScript: [
