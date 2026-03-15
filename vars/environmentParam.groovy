@@ -12,12 +12,12 @@ def call(String secret) {
 
           return ["\${Tenant} Dev", "\${Tenant} Test", "\${Tenant} Prod"]
         """
+      ],
+      fallbackScript: [
+        classpath: [],
+        sandbox: false,
+        script: 'return ["ERROR - could not load environments"]'
       ]
-    ],
-    fallbackScript: [
-      classpath: [],
-      sandbox: false,
-      script: 'return ["ERROR - could not load tenants"]'
     ]
   ]
 }

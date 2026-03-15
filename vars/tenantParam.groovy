@@ -14,12 +14,12 @@ def call(String secret) {
 
           return json.collect { it.name }
         """
+      ],
+      fallbackScript: [
+        classpath: [],
+        sandbox: false,
+        script: 'return ["ERROR - could not load tenants"]'
       ]
-    ],
-    fallbackScript: [
-      classpath: [],
-      sandbox: false,
-      script: 'return ["ERROR - could not load tenants"]'
     ]
   ]
 }
