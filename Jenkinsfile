@@ -5,7 +5,8 @@ withCredentials([
 ]) {
     properties([
         parameters([
-            tenantParam(MY_SECRET)
+            tenantParam(MY_SECRET),
+            environmentParam(MY_SECRET)
         ])
     ])
 }
