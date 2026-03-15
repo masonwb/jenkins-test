@@ -21,7 +21,7 @@ def call(String secret) {
       fallbackScript: [
         classpath: [],
         sandbox: false,
-        script: 'return ["ERROR - could not load environments"]'
+        script: 'return ["ERROR - could not load projects"]'
       ]
     ]
   ]
