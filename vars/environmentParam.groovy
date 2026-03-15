@@ -1,3 +1,3 @@
 def call() {
-  return choice(name: Environment, choices: ["Dev", "Test", "Prod"])
+  return choice(name: "Environment", choices: ["Dev", "Test", "Prod"])
 }
