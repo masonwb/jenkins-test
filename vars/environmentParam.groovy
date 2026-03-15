@@ -1,5 +1,5 @@
 def call(String secret) {
-  return [$class: 'ChoiceParameter',
+  return [$class: 'CascadeChoiceParameter',
     name: 'Environment',
     referencedParameters: 'Tenant',
     script: [
