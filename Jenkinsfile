@@ -28,7 +28,7 @@ pipeline {
     stages {
         stage('say-hi') {
             steps {
-                echo "${params.Tenant}"
+                echo "Tenant: ${params.Tenant}, Project: ${params.Project}, Environment: ${params.Environment}"
             }
         }
     }
