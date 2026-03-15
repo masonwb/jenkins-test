@@ -1,0 +1,102 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8443:8443"
+      - "9443:9443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - oauth2-proxy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:latest
+    env_file:
+      - .env
+    environment:
+      OAUTH2_PROXY_CLIENT_ID: "${CLIENT_ID}"
+      OAUTH2_PROXY_CLIENT_SECRET: "${CLIENT_SECRET}"
+      OAUTH2_PROXY_COOKIE_SECRET: "${COOKIE_SECRET}"
+      OAUTH2_PROXY_HTTP_ADDRESS: "0.0.0.0:4180"
+      OAUTH2_PROXY_UPSTREAMS: "http://host.docker.internal:3000"
+      OAUTH2_PROXY_EMAIL_DOMAINS: "*"
+      OAUTH2_PROXY_PROVIDER: "oidc"
+      OAUTH2_PROXY_OIDC_ISSUER_URL: "${OIDC_ISSUER_URL}"
+      OAUTH2_PROXY_REDIRECT_URL: "${OAUTH2_REDIRECT_URL}"
+      OAUTH2_PROXY_REVERSE_PROXY: "true"
+      OAUTH2_PROXY_REAL_CLIENT_IP_HEADER: "X-Real-IP"
+      OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: "true"
+      OAUTH2_PROXY_SESSION_STORE_TYPE: "cookie"
+      OAUTH2_PROXY_COOKIE_SECURE: "true"
+      OAUTH2_PROXY_COOKIE_SAMESITE: "lax"
+      OAUTH2_PROXY_INSECURE_OIDC_SKIP_ISSUER_VERIFICATION: "true"
+      OAUTH2_PROXY_OIDC_EXTRA_AUDIENCES: "master"
+      OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL: "true"
+    expose:
+      - "4180"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      keycloak:
+        condition: service_healthy
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: start-dev
+    ports:
+      - "9080:9080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: "${KEYCLOAK_ADMIN_USER:-admin}"
+      KC_BOOTSTRAP_ADMIN_PASSWORD: "${KEYCLOAK_ADMIN_PASSWORD}"
+      KC_DB: postgres
+      KC_DB_URL: "jdbc:postgresql://keycloak-db:5432/${POSTGRES_DB:-keycloak}"
+      KC_DB_USERNAME: "${POSTGRES_USER:-keycloak}"
+      KC_DB_PASSWORD: "${POSTGRES_PASSWORD}"
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: "xforwarded"
+      # Tell Keycloak to read the cert from the nginx-injected header
+      KC_SPI-X509CERT-LOOKUP-PROVIDER: "nginx"
+      KC_SPI-X509CERT-LOOKUP-NGINX-SSL-CLIENT-CERT: "X-SSL-Client-Cert"
+      KC_SPI-X509CERT-LOOKUP-NGINX-SSL-CERT-CHAIN-PREFIX: "USERCERTCHAIN"
+      KC_SPI_X509CERT_LOOKUP_NGINX_SSL_CLIENT_CERT: "X-SSL-Client-Cert"
+      KC_SPI_X509CERT_LOOKUP_NGINX_SSL_CERT_CHAIN_PREFIX: "USERCERTCHAIN"
+      KC_HTTP_PORT: "9080"
+      KC_HOSTNAME: "https://localhost:9443"   # ← what Keycloak puts in the discovery doc
+      KC_HOSTNAME_STRICT: "true"              # ← enforce it
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true" # ← lets container-to-container still use http://keycloak:9080
+      KC_SPI_TRUSTSTORE_FILE_FILE: "/opt/keycloak/certs/ca-truststore.p12"
+      KC_SPI_TRUSTSTORE_FILE_PASSWORD: "changeme"
+      KC_TLS_HOSTNAME_VERIFIER: "ANY"
+      KC_SPI_TRUSTSTORE_FILE_TYPE: "PKCS12"
+      KC_HEALTH_ENABLED: "true"
+    volumes:
+      - ./nginx/certs/ca-truststore.p12:/opt/keycloak/certs/ca-truststore.p12:ro
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "{ printf 'HEAD /health/ready HTTP/1.0\r\n\r\n' >&0; grep 'HTTP/1.0 200'; } 0<>/dev/tcp/localhost/9000 | grep -q '200 OK'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
+  keycloak-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-keycloak}"
+      POSTGRES_USER: "${POSTGRES_USER:-keycloak}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-keycloak} -d ${POSTGRES_DB:-keycloak}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  keycloak_db_data:

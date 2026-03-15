@@ -1,1 +1,2 @@
 .env
+oauth2-proxy/nginx/certs
