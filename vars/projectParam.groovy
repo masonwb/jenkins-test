@@ -1,6 +1,6 @@
 def call(String secret) {
   return [$class: 'CascadeChoiceParameter',
-    name: 'Environment',
+    name: 'Project',
     referencedParameters: 'Tenant',
     script: [
       $class: 'GroovyScript',
