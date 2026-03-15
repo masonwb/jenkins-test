@@ -1,16 +1,18 @@
 @Library('Katalog') _
 
-withCredentials([
-    string(credentialsId: 'my-secret', variable: 'MY_SECRET'),
-    certificate(credentialsId: 'dev-client', keystoreVariable: 'CERT_FILE', passwordVariable: 'CERT_PASSWORD')
-]) {
-    properties([
-        parameters([
-            tenantParam(CERT_FILE, CERT_PASSWORD),
-            projectParam(MY_SECRET),
-            environmentParam()
+node {
+    withCredentials([
+        string(credentialsId: 'my-secret', variable: 'MY_SECRET'),
+        certificate(credentialsId: 'dev-client', keystoreVariable: 'CERT_FILE', passwordVariable: 'CERT_PASSWORD')
+    ]) {
+        properties([
+            parameters([
+                tenantParam(CERT_FILE, CERT_PASSWORD),
+                projectParam(MY_SECRET),
+                environmentParam()
+            ])
         ])
-    ])
+    }
 }
 
 pipeline {
