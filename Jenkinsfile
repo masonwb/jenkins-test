@@ -5,6 +5,8 @@ node {
         string(credentialsId: 'my-secret', variable: 'MY_SECRET'),
         certificate(credentialsId: 'dev-client', keystoreVariable: 'CERT_FILE', passwordVariable: 'CERT_PASSWORD')
     ]) {
+        echo "CERT_FILE: ${CERT_FILE}"
+
         properties([
             parameters([
                 tenantParam(CERT_FILE, CERT_PASSWORD),
