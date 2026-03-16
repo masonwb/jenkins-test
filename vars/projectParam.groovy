@@ -17,7 +17,7 @@ def call(String folder, String credentialId) {
 
           def credentials = new JenkinsCertificateCredential("''' + folder + '''", "''' + credentialId + '''").getCredentials()
           def httpClient = new HttpClient(credentials)
-          def response = httpClient.get("http://host.docker.internal:3000/api/v1/tenants/${Tenant}/projects")
+          def response = httpClient.get("https://localhost:8443/api/v1/tenants/${Tenant}/projects")
 
           return new JsonSlurper().parseText(response).collect { it.name }
         '''
