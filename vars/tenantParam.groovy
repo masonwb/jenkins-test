@@ -48,6 +48,7 @@ def call(String folder, String credentialId) {
 
             HttpsURLConnection conn = (HttpsURLConnection) new URL(currentUrl).openConnection()
             conn.SSLSocketFactory = sslContext.socketFactory
+            conn.hostnameVerifier = { hostname, session -> true } as javax.net.ssl.HostnameVerifier
             conn.instanceFollowRedirects = false
 
             if (cookies) conn.setRequestProperty('Cookie', cookies.collect { k, v -> "$k=$v" }.join('; '))
