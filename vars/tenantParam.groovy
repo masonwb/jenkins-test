@@ -26,8 +26,6 @@ def call(String folder, String credentialId) {
           def ks = creds.keyStore  // already a KeyStore, no need to load from bytes
           def password = creds.password.plainText
 
-          return ["password: " + password]
-
           def kmf = javax.net.ssl.KeyManagerFactory.getInstance(javax.net.ssl.KeyManagerFactory.defaultAlgorithm)
           kmf.init(ks, password.toCharArray())
 
