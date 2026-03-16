@@ -22,8 +22,7 @@ class CredentialHelper {
     return CredentialsProvider.lookupCredentials(
       StandardCertificateCredentials,
       folder,
-      ACL.SYSTEM2,
-      Collections.emptyList()
+      ACL.SYSTEM
     ).find { it.id == this.credentialId }
   }
 }
