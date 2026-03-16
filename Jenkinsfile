@@ -28,6 +28,10 @@ pipeline {
     stages {
         stage('say-hi') {
             steps {
+                import io.strychnine.HelloWorld
+                def helloWorld = new HelloWorld()
+
+                echo helloWorld.hello()
                 echo "Tenant: ${params.Tenant}, Project: ${params.Project}, Environment: ${params.Environment}"
             }
         }

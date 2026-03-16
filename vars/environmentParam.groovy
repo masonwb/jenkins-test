@@ -1,19 +1,16 @@
 def call() {
+  def helpers = libraryResource('scripts/httpHelper.groovy')
+
   // return choice(name: "Environment", choices: ["Dev", "Test", "Prod"])
   return [$class: 'CascadeChoiceParameter',
     name: 'Environment',
     referencedParameters: 'Tenant',
     script: [
       $class: 'GroovyScript',
-      classpath: [
-        [$class: 'LibraryPath', library: 'Katalog', value: 'src']
-      ],
       script: [
         classpath: [],
         sandbox: false,
-        script: '''
-          import io.strychnine.HelloWorld
-
+        script: helpers + '''
           def helloWorld = new HelloWorld()
 
           return [helloWorld.hello()]
