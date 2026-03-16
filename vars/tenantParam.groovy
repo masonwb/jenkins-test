@@ -66,12 +66,12 @@ def call(String credentialId) {
 
           return result
         '''
-      ],
-      fallbackScript: [
-        classpath: [],
-        sandbox: false,
-        script: 'return ["ERROR - could not load tenants"]'
       ]
+      // fallbackScript: [
+      //   classpath: [],
+      //   sandbox: false,
+      //   script: 'return ["ERROR - could not load tenants"]'
+      // ]
     ]
   ]
 }
