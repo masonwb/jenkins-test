@@ -36,7 +36,7 @@ def call(String folder, String credentialId) {
           ] as javax.net.ssl.X509TrustManager
 
           def sslContext = javax.net.ssl.SSLContext.getInstance('TLS')
-          sslContext.init(kmf.keyManagers, trustAllCerts, null)
+          sslContext.init(kmf.keyManagers, [trustAllCerts], null)
 
           def currentUrl = "https://host.docker.internal:8443/api/v1/tenants"
           def cookies = [:]
