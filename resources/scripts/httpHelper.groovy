@@ -8,7 +8,7 @@ class HttpHelper {
     this.credentials = credentials
   }
 
-  get(String url) {
+  fetch(String url) {
     def ks = this.credentials.keyStore
     def password = this.credentials.password.plainText
 
