@@ -1,4 +1,7 @@
 def call(String secret) {
+  def JenkinsCertificateCredential = libraryResource('helpers/JenkinsCertificateCredential.groovy')
+  def HttpClient = libraryResource('helpers/HttpClient.groovy')
+
   return [$class: 'CascadeChoiceParameter',
     name: 'Project',
     referencedParameters: 'Tenant',
@@ -7,15 +10,16 @@ def call(String secret) {
       script: [
         classpath: [],
         sandbox: false,
-        script: '''
+        script: HttpClient + JenkinsCertificateCredential + '''
           import groovy.json.JsonSlurper
 
           if (!Tenant) return ["Select a tenant first"]
 
-          def response = new URL("http://host.docker.internal:3000/api/v1/tenants/" + Tenant + "/projects").text
-          def json = new JsonSlurper().parseText(response)
+          def credentials = new JenkinsCertificateCredential("''' + folder + '''", "''' + credentialId + '''").getCredentials()
+          def httpClient = new HttpClient(credentials)
+          def response = httpClient.get("http://host.docker.internal:3000/api/v1/tenants/${Tenant}/projects")
 
-          return json.collect { it.name }
+          return new JsonSlurper().parseText(response).collect { it.name }
         '''
       ],
       fallbackScript: [
