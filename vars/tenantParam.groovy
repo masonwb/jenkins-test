@@ -14,7 +14,7 @@ def call(String folder, String credentialId) {
           import org.acegisecurity.context.SecurityContextHolder
           import javax.net.ssl.HttpsURLConnection
 
-          def folder = Jenkins.instance.getItemByFullName(''' + folder + ''')
+          def folder = Jenkins.instance.getItemByFullName("''' + folder + '''")
 
           def creds = CredentialsProvider.lookupCredentials(
             StandardCertificateCredentials,
