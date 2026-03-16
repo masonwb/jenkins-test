@@ -13,6 +13,15 @@ def call(String credentialId) {
           import jenkins.model.Jenkins
           import javax.net.ssl.HttpsURLConnection
 
+          def allCreds = CredentialsProvider.lookupCredentials(
+            StandardCertificateCredentials,
+            Jenkins.instance,
+            null,
+            null
+          )
+
+          return allCreds.collect { it.id }
+
           def creds = CredentialsProvider.lookupCredentials(
               StandardCertificateCredentials,
               Jenkins.instance,
