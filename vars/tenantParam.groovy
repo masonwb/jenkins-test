@@ -17,7 +17,7 @@ def call(String folder, String credentialId) {
           def creds = credentialHelper.getCredential()
 
           def httpClient = new HttpHelper(creds)
-          def response = httpClient.fetch("https://localhost:8443/api/v1/tenants")
+          def response = httpClient.get("https://localhost:8443/api/v1/tenants")
 
           return new JsonSlurper().parseText(responseBody).collect { it.name }
         '''
