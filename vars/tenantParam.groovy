@@ -19,7 +19,7 @@ def call(String folder, String credentialId) {
           def httpClient = new HttpHelper(creds)
           def response = httpClient.get("https://localhost:8443/api/v1/tenants")
 
-          return new JsonSlurper().parseText(responseBody).collect { it.name }
+          return new JsonSlurper().parseText(response).collect { it.name }
         '''
       ]
       // fallbackScript: [
