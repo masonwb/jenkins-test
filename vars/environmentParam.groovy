@@ -1,7 +1,7 @@
 def call() {
   // return choice(name: "Environment", choices: ["Dev", "Test", "Prod"])
   return [$class: 'CascadeChoiceParameter',
-    name: 'Project',
+    name: 'Environment',
     referencedParameters: 'Tenant',
     script: [
       $class: 'GroovyScript',
@@ -16,11 +16,6 @@ def call() {
           return [helloWorld.hello()]
         '''
       ],
-      fallbackScript: [
-        classpath: [],
-        sandbox: false,
-        script: 'return ["ERROR - could not load projects"]'
-      ]
     ]
   ]
 }
