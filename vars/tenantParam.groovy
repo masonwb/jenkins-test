@@ -11,6 +11,7 @@ def call(String credentialId) {
           import com.cloudbees.plugins.credentials.CredentialsProvider
           import com.cloudbees.plugins.credentials.common.StandardCertificateCredentials
           import jenkins.model.Jenkins
+          javax.net.ssl.HttpsURLConnection
 
           def creds = CredentialsProvider.lookupCredentials(
               StandardCertificateCredentials,
