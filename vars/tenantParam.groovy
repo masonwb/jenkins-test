@@ -18,7 +18,7 @@ def call(String folder, String credentialId) {
 
           return new JsonSlurper().parseText(response).collect { it.name }
         '''
-      ]
+      ],
       fallbackScript: [
         classpath: [],
         sandbox: false,
