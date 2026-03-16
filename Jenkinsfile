@@ -1,7 +1,7 @@
 @Library('Katalog') _
 
-def folder = "Strychnine"
-def credentialId = "dev-client"
+folder = "Strychnine"
+credentialId = "dev-client"
 
 properties([
     parameters([
