@@ -13,7 +13,7 @@ def call(String folder, String credentialId) {
           import groovy.json.JsonSlurper
 
           def credentials = new JenkinsCertificateCredential("''' + folder + '''", "''' + credentialId + '''").getCredentials()
-          def httpClient = new HttpHelper(credentials)
+          def httpClient = new HttpClient(credentials)
           def response = httpClient.get("https://localhost:8443/api/v1/tenants")
 
           return new JsonSlurper().parseText(response).collect { it.name }
