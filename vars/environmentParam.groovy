@@ -3,6 +3,9 @@ def call() {
   return [$class: 'CascadeChoiceParameter',
     name: 'Environment',
     referencedParameters: 'Tenant',
+    classpath: [
+      [$class: 'LibraryPath', library: 'Katalog', value: 'src']
+    ],
     script: [
       $class: 'GroovyScript',
       script: [
