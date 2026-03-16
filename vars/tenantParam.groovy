@@ -1,4 +1,4 @@
-def call(String certFile, String certPassword) {
+def call(String credentialId) {
   return [$class: 'ChoiceParameter',
     name: 'Tenant',
     script: [
@@ -8,18 +8,24 @@ def call(String certFile, String certPassword) {
         sandbox: false,
         script: '''
           import groovy.json.JsonSlurper
+          import com.cloudbees.plugins.credentials.CredentialsProvider
+          import com.cloudbees.plugins.credentials.common.StandardCertificateCredentials
+          import jenkins.model.Jenkins
 
-          return ["DEBUG: " + new File(''' + certFile + ''').exists()]
+          def creds = CredentialsProvider.lookupCredentials(
+              StandardCertificateCredentials,
+              Jenkins.instance,
+              null,
+              null
+          ).find { it.id == "''' + credentialId + '''" }
 
-          def pfxBytes = new File(''' + certFile + ''').bytes
+          def ks = creds.keyStore  // already a KeyStore, no need to load from bytes
+          def password = creds.password.plainText
 
-          def ks = KeyStore.getInstance('PKCS12')
-          ks.load(new ByteArrayInputStream(pfxBytes), "''' + certPassword + '''".toCharArray())
+          def kmf = javax.net.ssl.KeyManagerFactory.getInstance(javax.net.ssl.KeyManagerFactory.defaultAlgorithm)
+          kmf.init(ks, password.toCharArray())
 
-          def kmf = KeyManagerFactory.getInstance(KeyManagerFactory.defaultAlgorithm)
-          kmf.init(ks, "''' + certPassword + '''".toCharArray())
-
-          def sslContext = SSLContext.getInstance('TLS')
+          def sslContext = javax.net.ssl.SSLContext.getInstance('TLS')
           sslContext.init(kmf.keyManagers, null, null)
 
           def currentUrl = "https://host.docker.internal:8443/api/v1/tenants"
