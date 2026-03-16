@@ -23,8 +23,6 @@ def call(String folder, String credentialId) {
             null
           ).find { it.id == "''' + credentialId + '''" }
 
-          return creds.collect { it.id }
-
           def ks = creds.keyStore  // already a KeyStore, no need to load from bytes
           def password = creds.password.plainText
 
