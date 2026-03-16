@@ -60,7 +60,7 @@ def call(String folder, String credentialId) {
                 values.each { raw ->
                   def pair = raw.split(';')[0].trim()
                   def eq = pair.indexOf('=')
-                  if (eq > 0) cookies[pair[0..<eq]] = pair[(eq+1)..-1]
+                  if (eq > 0) cookies[pair[0..<eq]] = eq + 1 < pair.length() ? pair[(eq+1)..-1] : ''
                 }
               }
             }
