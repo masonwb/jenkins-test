@@ -1,6 +1,5 @@
 def call() {
   // return choice(name: "Environment", choices: ["Dev", "Test", "Prod"])
-  def call(String secret) {
   return [$class: 'CascadeChoiceParameter',
     name: 'Project',
     referencedParameters: 'Tenant',
