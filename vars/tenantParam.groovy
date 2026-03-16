@@ -20,7 +20,7 @@ def call(String credentialId) {
               null
           ).find { it.id == "''' + credentialId + '''" }
 
-          return allCreds.collect { it.id }
+          return creds.collect { it.id }
 
           def ks = creds.keyStore  // already a KeyStore, no need to load from bytes
           def password = creds.password.plainText
