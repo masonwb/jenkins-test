@@ -1,4 +1,7 @@
 def call(String folder, String credentialId) {
+  def credentialHelper = libraryResource('scripts/credentialHelper.groovy')
+  def httpHelper = libraryResource('scripts/httpHelper.groovy')
+
   return [$class: 'ChoiceParameter',
     name: 'Tenant',
     script: [
@@ -6,22 +9,12 @@ def call(String folder, String credentialId) {
       script: [
         classpath: [],
         sandbox: false,
-        script: '''
+        script: httpHelper + credentialHelper + '''
           import groovy.json.JsonSlurper
-          import com.cloudbees.plugins.credentials.CredentialsProvider
-          import com.cloudbees.plugins.credentials.common.StandardCertificateCredentials
-          import jenkins.model.Jenkins
-          import org.acegisecurity.context.SecurityContextHolder
           import javax.net.ssl.HttpsURLConnection
 
-          def folder = Jenkins.instance.getItemByFullName("''' + folder + '''")
-
-          def creds = CredentialsProvider.lookupCredentials(
-            StandardCertificateCredentials,
-            folder,
-            SecurityContextHolder.context.authentication,
-            null
-          ).find { it.id == "''' + credentialId + '''" }
+          def credentialHelper = new CredentialHelper("''' + folder + '''", "''' + credentialId + '''")
+          def creds = credentialHelper.getCredential()
 
           def ks = creds.keyStore  // already a KeyStore, no need to load from bytes
           def password = creds.password.plainText

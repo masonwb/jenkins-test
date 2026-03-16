@@ -1,5 +1,4 @@
 @Library('Katalog') _
-import io.strychnine.HelloWorld
 
 withCredentials([
     string(credentialsId: 'my-secret', variable: 'MY_SECRET')
@@ -29,10 +28,6 @@ pipeline {
     stages {
         stage('say-hi') {
             steps {
-                script {
-                    def helloWorld = new HelloWorld()
-                    echo helloWorld.hello()
-                }
                 echo "Tenant: ${params.Tenant}, Project: ${params.Project}, Environment: ${params.Environment}"
             }
         }
