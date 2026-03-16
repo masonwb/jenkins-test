@@ -1,4 +1,4 @@
-def call(String credentialId) {
+def call(String folder, String credentialId) {
   return [$class: 'ChoiceParameter',
     name: 'Tenant',
     script: [
@@ -14,22 +14,13 @@ def call(String credentialId) {
           import org.acegisecurity.context.SecurityContextHolder
           import javax.net.ssl.HttpsURLConnection
 
-          def folder = Jenkins.instance.getItemByFullName('Strychnine')
+          def folder = Jenkins.instance.getItemByFullName(''' + folder + ''')
 
-          def allCreds = CredentialsProvider.lookupCredentials(
+          def creds = CredentialsProvider.lookupCredentials(
             StandardCertificateCredentials,
             folder,
             SecurityContextHolder.context.authentication,
             null
-          )
-
-          return allCreds.collect { it.id }
-
-          def creds = CredentialsProvider.lookupCredentials(
-              StandardCertificateCredentials,
-              Jenkins.instance,
-              null,
-              null
           ).find { it.id == "''' + credentialId + '''" }
 
           return creds.collect { it.id }
