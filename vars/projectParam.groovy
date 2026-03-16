@@ -1,4 +1,4 @@
-def call(String secret) {
+def call(String folder, String credentialId) {
   def JenkinsCertificateCredential = libraryResource('helpers/JenkinsCertificateCredential.groovy')
   def HttpClient = libraryResource('helpers/HttpClient.groovy')
 

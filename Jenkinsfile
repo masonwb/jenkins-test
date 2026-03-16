@@ -1,16 +1,15 @@
 @Library('Katalog') _
 
-withCredentials([
-    string(credentialsId: 'my-secret', variable: 'MY_SECRET')
-]) {
-    properties([
-        parameters([
-            tenantParam("Strychnine", "dev-client"),
-            projectParam(MY_SECRET),
-            environmentParam()
-        ])
+def folder = "Strychnine"
+def credentialId = "dev-client"
+
+properties([
+    parameters([
+        tenantParam(folder, credentialId),
+        projectParam(folder, credentialId),
+        environmentParam()
     ])
-}
+])
 
 pipeline {
     agent any
