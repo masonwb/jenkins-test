@@ -1,6 +1,6 @@
 def call(String folder, String credentialId) {
-  def credentialHelper = libraryResource('scripts/credentialHelper.groovy')
-  def httpHelper = libraryResource('scripts/httpHelper.groovy')
+  def JenkinsCertificateCredential = libraryResource('helpers/JenkinsCertificateCredential.groovy')
+  def HttpClient = libraryResource('helpers/HttpClient.groovy')
 
   return [$class: 'ChoiceParameter',
     name: 'Tenant',
@@ -9,14 +9,11 @@ def call(String folder, String credentialId) {
       script: [
         classpath: [],
         sandbox: false,
-        script: httpHelper + credentialHelper + '''
+        script: HttpClient + JenkinsCertificateCredential + '''
           import groovy.json.JsonSlurper
-          import javax.net.ssl.HttpsURLConnection
 
-          def credentialHelper = new CredentialHelper("''' + folder + '''", "''' + credentialId + '''")
-          def creds = credentialHelper.getCredential()
-
-          def httpClient = new HttpHelper(creds)
+          def credentials = new JenkinsCertificateCredential("''' + folder + '''", "''' + credentialId + '''").getCredentials()
+          def httpClient = new HttpHelper(credentials)
           def response = httpClient.get("https://localhost:8443/api/v1/tenants")
 
           return new JsonSlurper().parseText(response).collect { it.name }

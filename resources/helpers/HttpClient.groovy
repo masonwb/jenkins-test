@@ -1,10 +1,10 @@
 import com.cloudbees.plugins.credentials.common.StandardCertificateCredentials
 import javax.net.ssl.HttpsURLConnection
 
-class HttpHelper {
+class HttpClient {
   StandardCertificateCredentials credentials
 
-  HttpHelper(StandardCertificateCredentials credentials) {
+  HttpClient(StandardCertificateCredentials credentials) {
     this.credentials = credentials
   }
 

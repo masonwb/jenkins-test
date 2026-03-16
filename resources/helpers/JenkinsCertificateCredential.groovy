@@ -3,16 +3,16 @@ import com.cloudbees.plugins.credentials.common.StandardCertificateCredentials
 import hudson.security.ACL
 import jenkins.model.Jenkins
 
-class CredentialHelper {
+class JenkinsCertificateCredential {
   String folderName
   String credentialId
 
-  CredentialHelper(String folderName, String credentialId) {
+  JenkinsCertificateCredential(String folderName, String credentialId) {
     this.folderName = folderName
     this.credentialId = credentialId
   }
 
-  StandardCertificateCredentials getCredential() {
+  StandardCertificateCredentials getCredentials() {
     def jenkins = Jenkins.instanceOrNull
     if (jenkins == null) throw new IllegalStateException("Jenkins instance unavailable")
 
