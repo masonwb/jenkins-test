@@ -9,6 +9,8 @@ def call(String certFile, String certPassword) {
         script: '''
           import groovy.json.JsonSlurper
 
+          return ["DEBUG: " + new File(''' + certFile + ''').exists()]
+
           def pfxBytes = new File(''' + certFile + ''').bytes
 
           def ks = KeyStore.getInstance('PKCS12')
