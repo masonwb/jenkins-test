@@ -29,9 +29,10 @@ pipeline {
     stages {
         stage('say-hi') {
             steps {
-                def helloWorld = new HelloWorld()
-
-                echo helloWorld.hello()
+                script {
+                    def helloWorld = new HelloWorld()
+                    echo helloWorld.hello()
+                }
                 echo "Tenant: ${params.Tenant}, Project: ${params.Project}, Environment: ${params.Environment}"
             }
         }
