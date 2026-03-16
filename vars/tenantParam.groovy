@@ -29,8 +29,14 @@ def call(String folder, String credentialId) {
           def kmf = javax.net.ssl.KeyManagerFactory.getInstance(javax.net.ssl.KeyManagerFactory.defaultAlgorithm)
           kmf.init(ks, password.toCharArray())
 
+          def trustAllCerts = [
+            checkClientTrusted: { chain, authType -> },
+            checkServerTrusted: { chain, authType -> },
+            getAcceptedIssuers: { [] as java.security.cert.X509Certificate[] }
+          ] as javax.net.ssl.X509TrustManager
+
           def sslContext = javax.net.ssl.SSLContext.getInstance('TLS')
-          sslContext.init(kmf.keyManagers, null, null)
+          sslContext.init(kmf.keyManagers, trustAllCerts, null)
 
           def currentUrl = "https://host.docker.internal:8443/api/v1/tenants"
           def cookies = [:]
