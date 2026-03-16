@@ -13,10 +13,12 @@ def call(String credentialId) {
           import jenkins.model.Jenkins
           import javax.net.ssl.HttpsURLConnection
 
+          def folder = Jenkins.instance.getItemByFullName('Strychnine')
+
           def allCreds = CredentialsProvider.lookupCredentials(
             StandardCertificateCredentials,
-            Jenkins.instance,
-            null,
+            folder,
+            SecurityContextHolder.context.authentication,
             null
           )
 
